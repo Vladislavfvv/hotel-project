@@ -3,19 +3,20 @@ package com.example.hotelproject.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "amenities", schema = "public", indexes = {
-    @Index(name = "idx_amenity_name", columnList = "name")
+@Table(name = "countries", schema = "public", indexes = {
+    @Index(name = "idx_country_name", columnList = "name")
 })
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Amenity {
+public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +24,8 @@ public class Amenity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "amenities")
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     @JsonIgnore
     @Builder.Default
-    private List<Hotel> hotels = new ArrayList<>();
+    private List<City> cities = new ArrayList<>();
 }

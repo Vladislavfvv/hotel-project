@@ -1,4 +1,53 @@
 package com.example.hotelproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "addresses", schema = "public", indexes = {
+    @Index(name = "idx_address_street", columnList = "street_id"),
+    @Index(name = "idx_address_postcode", columnList = "postCode")
+})
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Address {
+    @Id
+    private Long id;
+
+    @Column(nullable = false)
+    private int houseNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "street_id", nullable = false)
+    private Street street;
+
+    @Column(nullable = false)
+    private String postCode;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "hotel_id")
+    @JsonBackReference
+    private Hotel hotel;
+    
+    // Вспомогательные методы для получения полного адреса
+    @Transient
+    public String getStreetName() {
+        return street != null ? street.getName() : null;
+    }
+    
+    @Transient
+    public String getCityName() {
+        return street != null && street.getCity() != null ? street.getCity().getName() : null;
+    }
+    
+    @Transient
+    public String getCountryName() {
+        return street != null && street.getCity() != null && street.getCity().getCountry() != null 
+            ? street.getCity().getCountry().getName() : null;
+    }
 }
