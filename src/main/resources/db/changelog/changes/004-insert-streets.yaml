@@ -1,0 +1,119 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-insert-streets
+      author: vlad
+      comment: "Inserting initial data for testing"
+      context: "!prod"  # Do not run in production
+      changes:
+        # Belarus streets (Minsk)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Pobediteley Avenue"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
+
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Independence Avenue"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
+
+        # Address for Hampton by Hilton Minsk City Centre
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Janki Kupaly"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
+
+        # Street for Hampton by Hilton Minsk City Centre
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Tolstogo Street"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
+        
+        # Belarus streets (Grodno)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Kalyuchinskaya"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Grodno')"
+        
+        # Russia streets (Moscow)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Red Square"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Moscow')"
+        
+        # Turkey streets (Istanbul)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Nobethane Cad"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Istanbul')"
+        
+        # Turkey streets (Antalya)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Okurcalar"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Antalya')"
+        
+        # Egypt streets (Hurghada)
+        - insert:
+            tableName: streets
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "El Corniche Road"
+              - column:
+                  name: city_id
+                  valueComputed: "(SELECT id FROM cities WHERE name = 'Hurghada')"
+      
+      rollback:
+        - delete:
+            tableName: streets
+            schemaName: public
+            where: "name IN ('Pobediteley Avenue', 'Independence Avenue', 'Janki Kupaly', 'Tolstogo Street', 'Kalyuchinskaya', 'Red Square', 'Nobethane Cad', 'Okurcalar', 'El Corniche Road')"

@@ -1,0 +1,112 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-insert-cities
+      author: vlad
+      comment: "Inserting initial data for testing"
+      context: "!prod"  # Do not run in production
+      changes:
+        # Belarus cities
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Minsk"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Belarus')"
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Gomel"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Belarus')"
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Grodno"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Belarus')"
+        
+        # Russia cities
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Moscow"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Russia')"
+        
+        # Turkey cities
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Istanbul"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Turkey')"
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Antalya"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Turkey')"
+        
+        # Egypt cities
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Hurghada"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Egypt')"
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Doha"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'Egypt')"
+        
+        # China cities
+        - insert:
+            tableName: cities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Hainan"
+              - column:
+                  name: country_id
+                  valueComputed: "(SELECT id FROM countries WHERE name = 'China')"
+      
+      rollback:
+        - delete:
+            tableName: cities
+            schemaName: public
+            where: "name IN ('Minsk', 'Gomel', 'Grodno', 'Moscow', 'Istanbul', 'Antalya', 'Hurghada', 'Doha', 'Hainan')"

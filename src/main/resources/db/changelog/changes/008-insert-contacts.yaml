@@ -1,0 +1,176 @@
+databaseChangeLog:
+  - changeSet:
+      id: 008-insert-contacts
+      author: vlad
+      comment: "Inserting initial contact data for testing"
+      context: "!prod"
+      changes:
+        #-------------------- Contact for DoubleTree by Hilton Minsk
+        - insert:
+            tableName: contacts
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
+        
+        - insert:
+            tableName: contact_phones
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
+              - column:
+                  name: phone
+                  value: "+375 17 309-80-00"
+        
+        - insert:
+            tableName: contact_emails
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
+              - column:
+                  name: email
+                  value: "doubletreeminsk.info@hilton.com"
+
+        # Waldorf Astoria by Hilton Minsk
+        - insert:
+            tableName: contacts
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
+
+        - insert:
+            tableName: contact_phones
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
+              - column:
+                  name: phone
+                  value: "+375-17-382-40-00"
+
+        - insert:
+            tableName: contact_emails
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
+              - column:
+                  name: email
+                  value: "waldorfastoriaminsk.info@hilton.com"
+
+
+        # Hampton by Hilton Minsk
+        - insert:
+            tableName: contacts
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
+
+        - insert:
+            tableName: contact_phones
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
+              - column:
+                  name: phone
+                  value: "+375 17 215-40-00"
+
+        - insert:
+            tableName: contact_emails
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
+              - column:
+                  name: email
+                  value: "hamptonaminsk.info@hilton.com"
+        
+        # Contact for Marriott Moscow
+        - insert:
+            tableName: contacts
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
+        
+        - insert:
+            tableName: contact_phones
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
+              - column:
+                  name: phone
+                  value: "+7 495 937-00-00"
+        
+        - insert:
+            tableName: contact_emails
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
+              - column:
+                  name: email
+                  value: "moscow.marriott@marriott.com"
+        
+        # Contact for Radisson Blu Istanbul
+        - insert:
+            tableName: contacts
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
+        
+        - insert:
+            tableName: contact_phones
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
+              - column:
+                  name: phone
+                  value: "+90 212 310-15-00"
+        
+        - insert:
+            tableName: contact_emails
+            schemaName: public
+            columns:
+              - column:
+                  name: contact_id
+                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
+              - column:
+                  name: email
+                  value: "info.istanbul@radissonblu.com"
+      
+      rollback:
+        - delete:
+            tableName: contact_emails
+            schemaName: public
+            where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
+        - delete:
+            tableName: contact_phones
+            schemaName: public
+            where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
+        - delete:
+            tableName: contacts
+            schemaName: public
+            where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"

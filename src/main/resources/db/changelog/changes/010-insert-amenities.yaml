@@ -1,0 +1,118 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010-insert-amenities
+      author: vlad
+      comment: "Inserting initial amenity data for testing"
+      context: "!prod"
+      changes:
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Free hot breakfast"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Free parking"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Free WiFi"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Non-smoking rooms"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Concierge"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "On-site restaurant"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Fitness center"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Pet-friendly rooms"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Pets not allowed"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Room service"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Business center"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Meeting rooms"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Swimming pool"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Spa"
+        - insert:
+            tableName: amenities
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Cribs"
+      
+      rollback:
+        - delete:
+            tableName: amenities
+            schemaName: public
+            where: "name IN ('Free hot breakfast', 'Free parking', 'Free WiFi', 'Non-smoking rooms', 'Concierge', 'On-site restaurant', 'Fitness center', 'Pet-friendly rooms', 'Pets not allowed', 'Room service', 'Business center', 'Meeting rooms', 'Swimming pool', 'Spa', 'Cribs')"

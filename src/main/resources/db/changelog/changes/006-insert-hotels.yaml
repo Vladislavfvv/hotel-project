@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-insert-hotels
+      author: vlad
+      comment: "Inserting initial hotel data for testing"
+      context: "!prod"
+      changes:
+        - insert:
+            tableName: hotels
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "DoubleTree by Hilton Minsk"
+              - column:
+                  name: description
+                  value: "The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotel's 20th floor"
+              - column:
+                  name: brand_id
+                  valueComputed: "(SELECT id FROM brands WHERE name = 'Hilton')"
+        - insert:
+            tableName: hotels
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Waldorf Astoria by Hilton Minsk"
+              - column:
+                  name: description
+                  value: "Waldorf Astoria Minsk offers 155 luxurious rooms and suites, providing guests with superior accommodations and modern amenities. The hotel's rooms are elegantly decorated with high-quality finishes, creating a comfortable and relaxing atmosphere for travelers visiting Minsk."
+              - column:
+                  name: brand_id
+                  valueComputed: "(SELECT id FROM brands WHERE name = 'Hilton')"
+
+        - insert:
+            tableName: hotels
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Hampton by Hilton Minsk"
+              - column:
+                  name: description
+                  value: "We're right next to the main train station, and 10 minutes' walk from the metro. Stolitsa shopping center, beneath Independence Square, is less than a kilometer from us. Return to eat in our restaurant, and relax in our 24-hour bar. Access to our fitness center, daily hot breakfast and WiFi are included in your stay."
+              - column:
+                  name: brand_id
+                  valueComputed: "(SELECT id FROM brands WHERE name = 'Hilton')"
+
+        - insert:
+            tableName: hotels
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Marriott Moscow"
+              - column:
+                  name: description
+                  value: "Luxury hotel in the heart of Moscow with exceptional service and modern amenities"
+              - column:
+                  name: brand_id
+                  valueComputed: "(SELECT id FROM brands WHERE name = 'Marriott')"
+        
+        - insert:
+            tableName: hotels
+            schemaName: public
+            columns:
+              - column:
+                  name: name
+                  value: "Radisson Blu Istanbul"
+              - column:
+                  name: description
+                  value: "Contemporary hotel offering panoramic views of the Bosphorus and easy access to Istanbul's attractions"
+              - column:
+                  name: brand_id
+                  valueComputed: "(SELECT id FROM brands WHERE name = 'Radisson')"
+      
+      rollback:
+        - delete:
+            tableName: hotels
+            schemaName: public
+            where: "name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul')"
