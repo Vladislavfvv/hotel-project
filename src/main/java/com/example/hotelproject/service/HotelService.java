@@ -32,13 +32,13 @@ public class HotelService {
         return hotelMapper.toDTO(hotel);
     }
     
-    // GET /search - поиск по параметру
+    // GET /search - поиск по параметру (поддержка одного или нескольких значений)
     public List<HotelShortDTO> searchHotels(
             String name,
-            String brand,
-            String city,
-            String country,
-            String amenity
+            List<String> brands,
+            List<String> cities,
+            List<String> countries,
+            List<String> amenities
     ) {
         List<Hotel> hotels;
         
@@ -46,17 +46,41 @@ public class HotelService {
         if (name != null && !name.isEmpty()) {
             hotels = hotelRepository.findByNameContainingIgnoreCase(name);
         } 
-        else if (brand != null && !brand.isEmpty()) {
-            hotels = hotelRepository.findByBrand_Name(brand);
+        else if (brands != null && !brands.isEmpty()) {
+            if (brands.size() == 1) {
+                hotels = hotelRepository.findByBrand_Name(brands.get(0));
+            } else {
+                // Преобразуем в верхний регистр для поиска
+                List<String> upperBrands = brands.stream().map(String::toUpperCase).toList();
+                hotels = hotelRepository.findByBrandNames(upperBrands);
+            }
         } 
-        else if (city != null && !city.isEmpty()) {
-            hotels = hotelRepository.findByCity(city);
+        else if (cities != null && !cities.isEmpty()) {
+            if (cities.size() == 1) {
+                hotels = hotelRepository.findByCity(cities.get(0));
+            } else {
+                // Преобразуем в верхний регистр для поиска
+                List<String> upperCities = cities.stream().map(String::toUpperCase).toList();
+                hotels = hotelRepository.findByCities(upperCities);
+            }
         } 
-        else if (country != null && !country.isEmpty()) {
-            hotels = hotelRepository.findByCountry(country);
+        else if (countries != null && !countries.isEmpty()) {
+            if (countries.size() == 1) {
+                hotels = hotelRepository.findByCountry(countries.get(0));
+            } else {
+                // Преобразуем в верхний регистр для поиска
+                List<String> upperCountries = countries.stream().map(String::toUpperCase).toList();
+                hotels = hotelRepository.findByCountries(upperCountries);
+            }
         } 
-        else if (amenity != null && !amenity.isEmpty()) {
-            hotels = hotelRepository.findByAmenities_Name(amenity);
+        else if (amenities != null && !amenities.isEmpty()) {
+            if (amenities.size() == 1) {
+                hotels = hotelRepository.findByAmenities_Name(amenities.get(0));
+            } else {
+                // Преобразуем в верхний регистр для поиска
+                List<String> upperAmenities = amenities.stream().map(String::toUpperCase).toList();
+                hotels = hotelRepository.findByAnyAmenities(upperAmenities);
+            }
         } 
         else {
             // Если параметры не переданы - возвращаем все отели

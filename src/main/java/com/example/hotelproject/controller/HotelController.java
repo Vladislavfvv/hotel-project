@@ -35,14 +35,14 @@ public class HotelController {
         return hotelService.getHotelById(id);
     }
 
-    // GET /search?city=minsk
+    // GET /search?city=minsk или /search?country=Belarus&country=Russia
     @GetMapping("/search")
     public List<HotelShortDTO> searchHotels(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) String brand,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String country,
-            @RequestParam(required = false) String amenity
+            @RequestParam(required = false) List<String> brand,
+            @RequestParam(required = false) List<String> city,
+            @RequestParam(required = false) List<String> country,
+            @RequestParam(required = false) List<String> amenity
     ) {
         log.info("Search hotels with params: name={}, brand={}, city={}, country={}, amenity={}",
                 name, brand, city, country, amenity);

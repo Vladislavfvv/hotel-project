@@ -19,29 +19,30 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
 
     // Найти все отели бренда
-    List<Hotel> findByBrand_Name(String name);
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.brand.name) = UPPER(:name)")
+    List<Hotel> findByBrand_Name(@Param("name") String name);
 
     // Найти отели нескольких брендов
-    @Query("SELECT h FROM Hotel h WHERE h.brand.name IN :brandNames")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.brand.name) IN :brandNames")
     List<Hotel> findByBrandNames(@Param("brandNames") List<String> brandNames);
 
 
     //  Поиск по месторасположению
 
     // Найти отели в городе
-    @Query("SELECT h FROM Hotel h WHERE h.address.street.city.name = :cityName")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.address.street.city.name) = UPPER(:cityName)")
     List<Hotel> findByCity(@Param("cityName") String cityName);
 
     // Найти отели в нескольких городах
-    @Query("SELECT h FROM Hotel h WHERE h.address.street.city.name IN :cityNames")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.address.street.city.name) IN :cityNames")
     List<Hotel> findByCities(@Param("cityNames") List<String> cityNames);
 
     // Найти отели в стране
-    @Query("SELECT h FROM Hotel h WHERE h.address.street.city.country.name = :countryName")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.address.street.city.country.name) = UPPER(:countryName)")
     List<Hotel> findByCountry(@Param("countryName") String countryName);
 
     // Найти отели в нескольких странах
-    @Query("SELECT h FROM Hotel h WHERE h.address.street.city.country.name IN :countryNames")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.address.street.city.country.name) IN :countryNames")
     List<Hotel> findByCountries(@Param("countryNames") List<String> countryNames);
 
     // Найти отели по почтовому индексу
@@ -51,29 +52,30 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     //  Поиск по amenities
 
     // Найти отели с конкретным удобством
-    List<Hotel> findByAmenities_Name(String name);
+    @Query("SELECT h FROM Hotel h JOIN h.amenities a WHERE UPPER(a.name) = UPPER(:name)")
+    List<Hotel> findByAmenities_Name(@Param("name") String name);
 
     // Найти отели с любым из указанных удобств
-    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE a.name IN :amenityNames")
+    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE UPPER(a.name) IN :amenityNames")
     List<Hotel> findByAnyAmenities(@Param("amenityNames") List<String> amenityNames);
 
 
     // !!!!!!!!!!!!!!!!!!!!!!! Комбинированные поиски  - их потом по необходимости использовать в сервис!!!!!!!!!!!!!!!!!!!
 
     // Отели бренда в городе
-    @Query("SELECT h FROM Hotel h WHERE h.brand.name = :brandName AND h.address.street.city.name = :cityName")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.brand.name) = UPPER(:brandName) AND UPPER(h.address.street.city.name) = UPPER(:cityName)")
     List<Hotel> findByBrandAndCity(@Param("brandName") String brandName, @Param("cityName") String cityName);
 
     // Отели бренда в стране
-    @Query("SELECT h FROM Hotel h WHERE h.brand.name = :brandName AND h.address.street.city.country.name = :countryName")
+    @Query("SELECT h FROM Hotel h WHERE UPPER(h.brand.name) = UPPER(:brandName) AND UPPER(h.address.street.city.country.name) = UPPER(:countryName)")
     List<Hotel> findByBrandAndCountry(@Param("brandName") String brandName, @Param("countryName") String countryName);
 
     // Отели в городе с удобством
-    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE h.address.street.city.name = :cityName AND a.name = :amenityName")
+    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE UPPER(h.address.street.city.name) = UPPER(:cityName) AND UPPER(a.name) = UPPER(:amenityName)")
     List<Hotel> findByCityAndAmenity(@Param("cityName") String cityName, @Param("amenityName") String amenityName);
 
     // Отели бренда с удобством
-    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE h.brand.name = :brandName AND a.name = :amenityName")
+    @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE UPPER(h.brand.name) = UPPER(:brandName) AND UPPER(a.name) = UPPER(:amenityName)")
     List<Hotel> findByBrandAndAmenity(@Param("brandName") String brandName, @Param("amenityName") String amenityName);
 }
 
