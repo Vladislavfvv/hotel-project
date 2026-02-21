@@ -8,7 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface AmenityRepository extends JpaRepository<Amenity, Long> {
-    
-    // Найти amenity по имени
+
     Optional<Amenity> findByName(String name);
 }

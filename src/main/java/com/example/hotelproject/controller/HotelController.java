@@ -49,22 +49,22 @@ public class HotelController {
         return hotelService.searchHotels(name, brand, city, country, amenity);
     }
 
-    //POST /hotels - создание нового отеля
-    @PostMapping("/hotels")
-    public HotelDTO createHotel(@RequestBody HotelDTO hotelDTO) {
-        log.info("Create hotel with data: " + hotelDTO);
-        return hotelService.createHotel(hotelDTO);
-    }
-
-    //POST /hotels/{id}/amenities - добавление списка amenities к отелю
-    @PostMapping("/hotels/{id}/amenities")
-    public Optional<HotelDTO> addAmenities(
-            @PathVariable Long id,
-            @RequestParam(required = false) List<String> amenities
-    ) {
-        log.info("Add amenities with params: " + amenities);
-        return hotelService.addAmenities(id, amenities);
-    }
+//    //POST /hotels - создание нового отеля
+//    @PostMapping("/hotels")
+//    public HotelDTO createHotel(@RequestBody HotelDTO hotelDTO) {
+//        log.info("Create hotel with data: " + hotelDTO);
+//        return hotelService.createHotel(hotelDTO);
+//    }
+//
+//    //POST /hotels/{id}/amenities - добавление списка amenities к отелю
+//    @PostMapping("/hotels/{id}/amenities")
+//    public Optional<HotelDTO> addAmenities(
+//            @PathVariable Long id,
+//            @RequestParam(required = false) List<String> amenities
+//    ) {
+//        log.info("Add amenities with params: " + amenities);
+//        return hotelService.addAmenities(id, amenities);
+//    }
 
     //GET /histogram/{param} - получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.
     //	Например: /histogram/city должен вернуть:
@@ -83,12 +83,12 @@ public class HotelController {
     //			и тд.
     //		}
 
-    @GetMapping("/histogram/{param}")
-    public List<HotelShortDTO> getHotelHistogram(
-            @PathVariable String param
-    ) {
-        log.info("Get hotel histogram with params: " + param);
-        return hotelService.getHotelsListGroupByParam(param);
-    }
+//    @GetMapping("/histogram/{param}")
+//    public List<HotelShortDTO> getHotelHistogram(
+//            @PathVariable String param
+//    ) {
+//        log.info("Get hotel histogram with params: " + param);
+//        return hotelService.getHotelsListGroupByParam(param);
+//    }
 
 }
