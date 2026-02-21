@@ -11,6 +11,7 @@ public interface AddressMapper {
     @Mapping(target = "street", source = "street.name")
     @Mapping(target = "city", source = "street.city.name")
     @Mapping(target = "country", source = "street.city.country.name")
+    @Mapping(target = "postCode", source = "postcode")
     AddressDTO toDTO(Address address);
 
 }

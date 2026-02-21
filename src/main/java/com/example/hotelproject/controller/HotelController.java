@@ -51,7 +51,7 @@ public class HotelController {
 
     // POST /hotels - создание нового отеля
     @PostMapping("/hotels")
-    public HotelDTO createHotel(@RequestBody HotelDTO hotelDTO) {
+    public HotelShortDTO createHotel(@RequestBody HotelDTO hotelDTO) {
         log.info("Create hotel with data: {}", hotelDTO);
         return hotelService.createHotel(hotelDTO);
     }

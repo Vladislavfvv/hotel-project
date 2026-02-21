@@ -92,8 +92,9 @@ public class HotelService {
     }
 
     // POST /hotels - создание нового отеля
+    // POST /hotels - создание нового отеля
     @Transactional
-    public HotelDTO createHotel(HotelDTO hotelDTO) {
+    public HotelShortDTO createHotel(HotelDTO hotelDTO) {
         log.info("Creating hotel: name={}, brand={}", hotelDTO.getName(), hotelDTO.getBrand());
 
         // Проверка существования отеля
@@ -141,7 +142,7 @@ public class HotelService {
                         newStreet.setCity(city);
                         return streetRepository.save(newStreet);
                     });
-            
+
             address.setStreet(street);
             address.setHotel(hotel);
             hotel.setAddress(address);
@@ -149,8 +150,8 @@ public class HotelService {
 
         if (hotelDTO.getContacts() != null) {
             Contact contact = new Contact();
-            contact.setPhones(hotelDTO.getContacts().getPhones());
-            contact.setEmails(hotelDTO.getContacts().getEmails());
+            contact.setPhone(hotelDTO.getContacts().getPhone());
+            contact.setEmail(hotelDTO.getContacts().getEmail());
             contact.setHotel(hotel);
             hotel.setContact(contact);
         }
@@ -179,7 +180,8 @@ public class HotelService {
 
         Hotel savedHotel = hotelRepository.save(hotel);
         log.info("Hotel created successfully: id={}, name={}", savedHotel.getId(), savedHotel.getName());
-        
-        return hotelMapper.toDTO(savedHotel);
+
+        return hotelMapper.toShortDTO(savedHotel);
     }
+
 }

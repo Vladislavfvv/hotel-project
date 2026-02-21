@@ -52,13 +52,11 @@ public interface HotelMapper {
         );
     }
     
-    // Получение первого телефона
+    // Получение телефона
     @Named("getFirstPhone")
     default String getFirstPhone(Hotel hotel) {
-        if (hotel.getContact() != null && 
-            hotel.getContact().getPhones() != null && 
-            !hotel.getContact().getPhones().isEmpty()) {
-            return hotel.getContact().getPhones().get(0);
+        if (hotel.getContact() != null) {
+            return hotel.getContact().getPhone();
         }
         return null;
     }

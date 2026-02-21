@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,6 +13,6 @@ import java.util.List;
 @Builder
 public class ContactDTO {
     
-    private List<String> phones;
-    private List<String> emails;
+    private String phone;
+    private String email;
 }

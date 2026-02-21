@@ -2,6 +2,8 @@ databaseChangeLog:
   - changeSet:
       id: 001-create-countries
       author: vlad
+      comment: "Creating initial data for testing"
+      context: "!prod"
       changes:
         - createTable:
             tableName: countries
@@ -29,7 +31,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 002-create-cities
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: cities
@@ -69,7 +71,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 003-create-streets
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: streets
@@ -109,7 +111,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 004-create-brands
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: brands
@@ -137,7 +139,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 005-create-hotels
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: hotels
@@ -180,7 +182,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 006-create-addresses
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: addresses
@@ -226,7 +228,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 007-create-contacts
-      author: system
+      author: vlad
       changes:
         - createTable:
             tableName: contacts
@@ -240,52 +242,16 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_contact_hotel
                     references: hotels(id)
-
-  - changeSet:
-      id: 008-create-contact-phones
-      author: system
-      changes:
-        - createTable:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_phone_contact
-                    references: contacts(id)
               - column:
                   name: phone
                   type: VARCHAR(50)
-                  constraints:
-                    nullable: false
-
-  - changeSet:
-      id: 009-create-contact-emails
-      author: system
-      changes:
-        - createTable:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_email_contact
-                    references: contacts(id)
               - column:
                   name: email
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
 
   - changeSet:
-      id: 010-create-arrival-times
-      author: system
+      id: 008-create-arrival-times
+      author: vlad
       changes:
         - createTable:
             tableName: arrival_times
@@ -307,8 +273,8 @@ databaseChangeLog:
                   type: VARCHAR(10)
 
   - changeSet:
-      id: 011-create-amenities
-      author: system
+      id: 009-create-amenities
+      author: vlad
       changes:
         - createTable:
             tableName: amenities
@@ -335,8 +301,8 @@ databaseChangeLog:
                   name: name
 
   - changeSet:
-      id: 012-create-hotel-amenities
-      author: system
+      id: 010-create-hotel-amenities
+      author: vlad
       changes:
         - createTable:
             tableName: hotel_amenities

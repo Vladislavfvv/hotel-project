@@ -5,33 +5,16 @@ databaseChangeLog:
       comment: "Inserting initial contact data for testing"
       context: "!prod"
       changes:
-        #-------------------- Contact for DoubleTree by Hilton Minsk
+        # Contact for DoubleTree by Hilton Minsk
         - insert:
             tableName: contacts
-
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
-        
-        - insert:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
               - column:
                   name: phone
                   value: "+375 17 309-80-00"
-        
-        - insert:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
               - column:
                   name: email
                   value: "doubletreeminsk.info@hilton.com"
@@ -39,62 +22,27 @@ databaseChangeLog:
         # Waldorf Astoria by Hilton Minsk
         - insert:
             tableName: contacts
-
             columns:
               - column:
                   name: id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
-
-        - insert:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
               - column:
                   name: phone
                   value: "+375-17-382-40-00"
-
-        - insert:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
               - column:
                   name: email
                   value: "waldorfastoriaminsk.info@hilton.com"
 
-
         # Hampton by Hilton Minsk
         - insert:
             tableName: contacts
-
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
-
-        - insert:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
               - column:
                   name: phone
                   value: "+375 17 215-40-00"
-
-        - insert:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
               - column:
                   name: email
                   value: "hamptonaminsk.info@hilton.com"
@@ -102,30 +50,13 @@ databaseChangeLog:
         # Contact for Marriott Moscow
         - insert:
             tableName: contacts
-
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
-        
-        - insert:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
               - column:
                   name: phone
                   value: "+7 495 937-00-00"
-        
-        - insert:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
               - column:
                   name: email
                   value: "moscow.marriott@marriott.com"
@@ -133,44 +64,18 @@ databaseChangeLog:
         # Contact for Radisson Blu Istanbul
         - insert:
             tableName: contacts
-
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
-        
-        - insert:
-            tableName: contact_phones
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
               - column:
                   name: phone
                   value: "+90 212 310-15-00"
-        
-        - insert:
-            tableName: contact_emails
-
-            columns:
-              - column:
-                  name: contact_id
-                  valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
               - column:
                   name: email
                   value: "info.istanbul@radissonblu.com"
       
       rollback:
         - delete:
-            tableName: contact_emails
-
-            where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
-        - delete:
-            tableName: contact_phones
-
-            where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
-        - delete:
             tableName: contacts
-
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
