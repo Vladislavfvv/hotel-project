@@ -12,21 +12,13 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {AddressMapper.class})
 public interface HotelMapper {
-    
-    // Полная информация об отеле
+
     @Mapping(target = "brand", source = "brand.name")
     @Mapping(target = "amenities", source = "amenities")
     @Mapping(target = "address", source = "address")
     @Mapping(target = "contacts", source = "contact")
     @Mapping(target = "arrivalTime", source = "arrivalTime")
     HotelDTO toDTO(Hotel hotel);
-
-    @Mapping(target = "brand.name", source = "brand")
-    @Mapping(target = "amenities", source = "amenities")
-    @Mapping(target = "address", source = "address")
-    @Mapping(target = "contacts", source = "contact")
-    @Mapping(target = "arrivalTime", source = "arrivalTime")
-    Hotel toEntity(HotelDTO dto);
     
     List<HotelDTO> toDTOList(List<Hotel> hotels);
     
@@ -36,8 +28,6 @@ public interface HotelMapper {
     HotelShortDTO toShortDTO(Hotel hotel);
     
     List<HotelShortDTO> toShortDTOList(List<Hotel> hotels);
-
-    List<Hotel>  toEntityList( List<HotelShortDTO> hotelDTOList);
     
     // Форматирование адреса в строку
     @Named("formatAddress")
@@ -47,10 +37,10 @@ public interface HotelMapper {
         }
         return String.format("%d %s, %s, %s, %s",
             hotel.getAddress().getHouseNumber(),
-            hotel.getAddress().getStreetName(),
-            hotel.getAddress().getCityName(),
-            hotel.getAddress().getPostCode(),
-            hotel.getAddress().getCountryName()
+            hotel.getAddress().getStreet().getName(),
+            hotel.getAddress().getStreet().getCity().getName(),
+            hotel.getAddress().getPostcode(),
+            hotel.getAddress().getStreet().getCity().getCountry().getName()
         );
     }
     
@@ -65,7 +55,7 @@ public interface HotelMapper {
         return null;
     }
     
-    //  преобразует список объектов Amenity в список строк для JSON
+    // Преобразует список объектов Amenity в список строк для JSON
     default List<String> mapAmenities(List<Amenity> amenities) {
         if (amenities == null) {
             return null;

@@ -8,13 +8,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
     
-    @Mapping(target = "street", source = "streetName")
-    @Mapping(target = "city", source = "cityName")
-    @Mapping(target = "country", source = "countryName")
+    @Mapping(target = "street", source = "street.name")
+    @Mapping(target = "city", source = "street.city.name")
+    @Mapping(target = "country", source = "street.city.country.name")
     AddressDTO toDTO(Address address);
 
-    @Mapping(target = "streetName", source = "street")
-    @Mapping(target = "cityName", source = "city")
-    @Mapping(target = "countryName", source = "country")
-    Address toEntity(AddressDTO dto);
 }
