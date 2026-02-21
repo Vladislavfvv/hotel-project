@@ -7,7 +7,7 @@ databaseChangeLog:
       changes:
         - insert:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: name
@@ -20,7 +20,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM brands WHERE name = 'Hilton')"
         - insert:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: name
@@ -34,7 +34,7 @@ databaseChangeLog:
 
         - insert:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: name
@@ -48,7 +48,7 @@ databaseChangeLog:
 
         - insert:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: name
@@ -62,7 +62,7 @@ databaseChangeLog:
         
         - insert:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: name
@@ -77,5 +77,5 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: hotels
-            schemaName: public
+
             where: "name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul')"

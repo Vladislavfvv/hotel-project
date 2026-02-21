@@ -8,7 +8,7 @@ databaseChangeLog:
         #-------------------- Contact for DoubleTree by Hilton Minsk
         - insert:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -16,7 +16,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -27,7 +27,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -39,7 +39,7 @@ databaseChangeLog:
         # Waldorf Astoria by Hilton Minsk
         - insert:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -47,7 +47,7 @@ databaseChangeLog:
 
         - insert:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -58,7 +58,7 @@ databaseChangeLog:
 
         - insert:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -71,7 +71,7 @@ databaseChangeLog:
         # Hampton by Hilton Minsk
         - insert:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -79,7 +79,7 @@ databaseChangeLog:
 
         - insert:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -90,7 +90,7 @@ databaseChangeLog:
 
         - insert:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -102,7 +102,7 @@ databaseChangeLog:
         # Contact for Marriott Moscow
         - insert:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -110,7 +110,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -121,7 +121,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -133,7 +133,7 @@ databaseChangeLog:
         # Contact for Radisson Blu Istanbul
         - insert:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -141,7 +141,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -152,7 +152,7 @@ databaseChangeLog:
         
         - insert:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -164,13 +164,13 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: contact_emails
-            schemaName: public
+
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
         - delete:
             tableName: contact_phones
-            schemaName: public
+
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
         - delete:
             tableName: contacts
-            schemaName: public
+
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"

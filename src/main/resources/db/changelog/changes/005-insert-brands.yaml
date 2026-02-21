@@ -7,42 +7,35 @@ databaseChangeLog:
       changes:
         - insert:
             tableName: brands
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Hilton"
         - insert:
             tableName: brands
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Marriott"
         - insert:
             tableName: brands
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Hyatt"
         - insert:
             tableName: brands
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Radisson"
         - insert:
             tableName: brands
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "InterContinental"
-      
       rollback:
         - delete:
             tableName: brands
-            schemaName: public
             where: "name IN ('Hilton', 'Marriott', 'Hyatt', 'Radisson', 'InterContinental')"

@@ -3,46 +3,40 @@ databaseChangeLog:
       id: 002-insert-countries
       author: vlad
       comment: "Inserting initial data for testing"
-      context: "!prod"  # Do not run in production
+      context: "!prod"
       changes:
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Belarus"
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Russia"
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Turkey"
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "Egypt"
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
                   value: "China"
         - insert:
             tableName: countries
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -50,6 +44,4 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: countries
-            schemaName: public
             where: "name IN ('Belarus', 'Russia', 'Turkey', 'Egypt', 'China', 'USA')"
-

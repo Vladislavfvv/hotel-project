@@ -5,10 +5,8 @@ databaseChangeLog:
       comment: "Inserting initial arrival time data for testing"
       context: "!prod"
       changes:
-        # Arrival time for DoubleTree by Hilton Minsk
         - insert:
             tableName: arrival_times
-            schemaName: public
             columns:
               - column:
                   name: id
@@ -19,11 +17,8 @@ databaseChangeLog:
               - column:
                   name: check_out
                   value: "12:00"
-
-        # Arrival time for Waldorf Astoria by Hilton Minsk
         - insert:
             tableName: arrival_times
-            schemaName: public
             columns:
               - column:
                   name: id
@@ -34,11 +29,8 @@ databaseChangeLog:
               - column:
                   name: check_out
                   value: "12:00"
-
-        # Arrival time for Hampton by Hilton Minsk
         - insert:
             tableName: arrival_times
-            schemaName: public
             columns:
               - column:
                   name: id
@@ -49,11 +41,8 @@ databaseChangeLog:
               - column:
                   name: check_out
                   value: "12:00"
-        
-        # Arrival time for Marriott Moscow
         - insert:
             tableName: arrival_times
-            schemaName: public
             columns:
               - column:
                   name: id
@@ -64,11 +53,8 @@ databaseChangeLog:
               - column:
                   name: check_out
                   value: "12:00"
-        
-        # Arrival time for Radisson Blu Istanbul
         - insert:
             tableName: arrival_times
-            schemaName: public
             columns:
               - column:
                   name: id
@@ -79,9 +65,7 @@ databaseChangeLog:
               - column:
                   name: check_out
                   value: "11:00"
-      
       rollback:
         - delete:
             tableName: arrival_times
-            schemaName: public
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"

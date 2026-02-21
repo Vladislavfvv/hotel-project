@@ -8,95 +8,89 @@ databaseChangeLog:
         # Address for DoubleTree by Hilton Minsk
         - insert:
             tableName: addresses
-            schemaName: public
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
               - column:
-                  name: house_number
+                  name: houseNumber
                   valueNumeric: 9
               - column:
                   name: street_id
                   valueComputed: "(SELECT id FROM streets WHERE name = 'Pobediteley Avenue')"
               - column:
-                  name: post_code
+                  name: postcode
                   value: "220004"
 
         # Address for Waldorf Astoria Minsk
         - insert:
             tableName: addresses
-            schemaName: public
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
               - column:
-                  name: house_number
+                  name: houseNumber
                   valueNumeric: 27
               - column:
                   name: street_id
                   valueComputed: "(SELECT id FROM streets WHERE name = 'Janki Kupaly')"
               - column:
-                  name: post_code
+                  name: postcode
                   value: "220000"
 
         # Address for Hampton by Hilton Minsk
         - insert:
             tableName: addresses
-            schemaName: public
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
               - column:
-                  name: house_number
+                  name: houseNumber
                   valueNumeric: 8
               - column:
                   name: street_id
                   valueComputed: "(SELECT id FROM streets WHERE name = 'Tolstogo Street')"
               - column:
-                  name: post_code
+                  name: postcode
                   value: "220007"
         
         # Address for Marriott Moscow
         - insert:
             tableName: addresses
-            schemaName: public
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
               - column:
-                  name: house_number
+                  name: houseNumber
                   valueNumeric: 1
               - column:
                   name: street_id
                   valueComputed: "(SELECT id FROM streets WHERE name = 'Red Square')"
               - column:
-                  name: post_code
+                  name: postcode
                   value: "109012"
         
         # Address for Radisson Blu Istanbul
         - insert:
             tableName: addresses
-            schemaName: public
             columns:
               - column:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
               - column:
-                  name: house_number
+                  name: houseNumber
                   valueNumeric: 15
               - column:
                   name: street_id
                   valueComputed: "(SELECT id FROM streets WHERE name = 'Nobethane Cad')"
               - column:
-                  name: post_code
+                  name: postcode
                   value: "34349"
       
       rollback:
         - delete:
             tableName: addresses
-            schemaName: public
             where: "id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk',  'Marriott Moscow', 'Radisson Blu Istanbul'))"

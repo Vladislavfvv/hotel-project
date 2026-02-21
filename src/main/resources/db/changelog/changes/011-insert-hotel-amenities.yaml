@@ -8,7 +8,7 @@ databaseChangeLog:
         # DoubleTree by Hilton Minsk amenities
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -18,7 +18,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free parking')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -28,7 +28,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free WiFi')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -38,7 +38,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Non-smoking rooms')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -48,7 +48,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Concierge')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -58,7 +58,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'On-site restaurant')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -68,7 +68,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Fitness center')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -78,7 +78,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Room service')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -91,7 +91,7 @@ databaseChangeLog:
         # Waldorf Astoria by Hilton Minsk amenities
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -101,7 +101,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free parking')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -111,7 +111,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free WiFi')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -121,7 +121,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Non-smoking rooms')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -131,7 +131,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Spa')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -141,7 +141,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Fitness center')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -155,7 +155,7 @@ databaseChangeLog:
         # Hampton by Hilton Minsk amenities
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -165,7 +165,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free parking')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -175,7 +175,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free WiFi')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -185,7 +185,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Non-smoking rooms')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -195,7 +195,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free hot breakfast')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -205,7 +205,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Fitness center')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -215,7 +215,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Pets not allowed')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -225,7 +225,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Business center')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -235,7 +235,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Meeting rooms')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -247,7 +247,7 @@ databaseChangeLog:
         # Marriott Moscow amenities
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -257,7 +257,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free WiFi')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -267,7 +267,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Fitness center')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -277,7 +277,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Swimming pool')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -289,7 +289,7 @@ databaseChangeLog:
         # Radisson Blu Istanbul amenities
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -299,7 +299,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'Free WiFi')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -309,7 +309,7 @@ databaseChangeLog:
                   valueComputed: "(SELECT id FROM amenities WHERE name = 'On-site restaurant')"
         - insert:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
@@ -321,5 +321,5 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: hotel_amenities
-            schemaName: public
-            where: "hotel_id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"
+
+            where: "hotel_id IN (SELECT id FROM hotels WHERE name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk','Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul'))"

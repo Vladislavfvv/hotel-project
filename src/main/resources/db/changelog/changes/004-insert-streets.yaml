@@ -3,12 +3,10 @@ databaseChangeLog:
       id: 004-insert-streets
       author: vlad
       comment: "Inserting initial data for testing"
-      context: "!prod"  # Do not run in production
+      context: "!prod"
       changes:
-        # Belarus streets (Minsk)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -16,10 +14,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
-
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -27,11 +23,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
-
-        # Address for Hampton by Hilton Minsk City Centre
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -39,11 +32,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
-
-        # Street for Hampton by Hilton Minsk City Centre
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -51,11 +41,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Minsk')"
-        
-        # Belarus streets (Grodno)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -63,11 +50,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Grodno')"
-        
-        # Russia streets (Moscow)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -75,11 +59,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Moscow')"
-        
-        # Turkey streets (Istanbul)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -87,11 +68,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Istanbul')"
-        
-        # Turkey streets (Antalya)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -99,11 +77,8 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Antalya')"
-        
-        # Egypt streets (Hurghada)
         - insert:
             tableName: streets
-            schemaName: public
             columns:
               - column:
                   name: name
@@ -111,9 +86,7 @@ databaseChangeLog:
               - column:
                   name: city_id
                   valueComputed: "(SELECT id FROM cities WHERE name = 'Hurghada')"
-      
       rollback:
         - delete:
             tableName: streets
-            schemaName: public
             where: "name IN ('Pobediteley Avenue', 'Independence Avenue', 'Janki Kupaly', 'Tolstogo Street', 'Kalyuchinskaya', 'Red Square', 'Nobethane Cad', 'Okurcalar', 'El Corniche Road')"

@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: countries
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -33,7 +33,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: cities
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -73,7 +73,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: streets
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -113,7 +113,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: brands
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -141,7 +141,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: hotels
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -186,7 +186,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: addresses
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -197,7 +197,7 @@ databaseChangeLog:
                     foreignKeyName: fk_address_hotel
                     references: hotels(id)
               - column:
-                  name: house_number
+                  name: houseNumber
                   type: INT
                   constraints:
                     nullable: false
@@ -209,7 +209,7 @@ databaseChangeLog:
                     foreignKeyName: fk_address_street
                     references: streets(id)
               - column:
-                  name: post_code
+                  name: postcode
                   type: VARCHAR(20)
                   constraints:
                     nullable: false
@@ -224,7 +224,7 @@ databaseChangeLog:
             tableName: addresses
             columns:
               - column:
-                  name: post_code
+                  name: postcode
 
   - changeSet:
       id: 007-create-contacts
@@ -232,7 +232,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: contacts
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -249,7 +249,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: contact_phones
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -270,7 +270,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: contact_emails
-            schemaName: public
+
             columns:
               - column:
                   name: contact_id
@@ -291,7 +291,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: arrival_times
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -314,7 +314,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: amenities
-            schemaName: public
+
             columns:
               - column:
                   name: id
@@ -342,7 +342,7 @@ databaseChangeLog:
       changes:
         - createTable:
             tableName: hotel_amenities
-            schemaName: public
+
             columns:
               - column:
                   name: hotel_id
