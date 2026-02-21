@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "brands", schema = "public", indexes = {
-    @Index(name = "idx_brand_name", columnList = "name")
+@Table(name = "brands", indexes = {
+    @Index(name = "idx_brand_name", columnList = "brandName")
 })
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "brand")

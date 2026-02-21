@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "contacts", schema = "public")
+@Table(name = "contacts")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -44,7 +44,7 @@ public class Contact {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "hotel_id")
+    @JoinColumn(name = "id")
     @JsonBackReference
     private Hotel hotel;
 }

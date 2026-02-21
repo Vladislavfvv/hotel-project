@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "amenities", schema = "public", indexes = {
-    @Index(name = "idx_amenity_name", columnList = "name")
+@Table(name = "amenities", indexes = {
+    @Index(name = "idx_amenity_name", columnList = "amenityName")
 })
 @Getter
 @Setter
@@ -32,7 +32,7 @@ public class Amenity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "amenities")

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "arrival_times", schema = "public")
+@Table(name = "arrival_times")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,15 +25,15 @@ public class ArrivalTime {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "check_in", nullable = false)
     private String checkIn;
 
-    @Column
+    @Column(name = "check_out")
     private String checkOut;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "hotel_id")
+    @JoinColumn(name = "id")
     @JsonBackReference
     private Hotel hotel;
 }

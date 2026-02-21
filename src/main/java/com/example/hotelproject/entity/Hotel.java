@@ -25,7 +25,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "hotels", schema = "public", indexes = {
+@Table(name = "hotels", indexes = {
     @Index(name = "idx_hotel_name", columnList = "name"),
     @Index(name = "idx_hotel_brand", columnList = "brand_id")
 })
@@ -67,5 +67,6 @@ public class Hotel {
         joinColumns = @JoinColumn(name = "hotel_id"),
         inverseJoinColumns = @JoinColumn(name = "amenity_id")
     )
+    @Builder.Default
     private List<Amenity> amenities = new ArrayList<>();
 }

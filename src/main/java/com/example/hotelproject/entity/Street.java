@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "streets", schema = "public", indexes = {
-    @Index(name = "idx_street_name", columnList = "name"),
+@Table(name = "streets", indexes = {
+    @Index(name = "idx_street_name", columnList = "streetName"),
     @Index(name = "idx_street_city", columnList = "city_id")
 })
 @Getter
@@ -35,7 +35,7 @@ public class Street {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToOne
@@ -45,6 +45,6 @@ public class Street {
 
     @OneToMany(mappedBy = "street")
     @JsonIgnore
-    @Builder.Default
-    private List<Address> addresses = new ArrayList<>();
+    @Builder.Default //для полей с инициализацией по умолчанию рекомендуется всегда использовать, иначе можно получить NPE
+    private List<Address> addresses = new ArrayList<>();//т.е. сразу инициализируем и потом удобно переопределить и добавлять
 }

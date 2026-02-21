@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "cities", schema = "public", indexes = {
-    @Index(name = "idx_city_name", columnList = "name"),
+@Table(name = "cities", indexes = {
+    @Index(name = "idx_city_name", columnList = "cityName"),
     @Index(name = "idx_city_country", columnList = "country_id")
 })
 @Getter
@@ -36,7 +36,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToOne

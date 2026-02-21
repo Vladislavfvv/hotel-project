@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "addresses", schema = "public", indexes = {
+@Table(name = "addresses", indexes = {
     @Index(name = "idx_address_street", columnList = "street_id"),
     @Index(name = "idx_address_postcode", columnList = "postCode")
 })
@@ -31,23 +31,22 @@ public class Address {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "houseNumber", nullable = false)
     private int houseNumber;
 
     @ManyToOne
     @JoinColumn(name = "street_id", nullable = false)
     private Street street;
 
-    @Column(nullable = false)
-    private String postCode;
+    @Column(name = "postcode", nullable = false)
+    private String postcode;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "hotel_id")
+    @JoinColumn(name = "id")
     @JsonBackReference
     private Hotel hotel;
-    
-    // Вспомогательные методы для получения полного адреса
+
     @Transient
     public String getStreetName() {
         return street != null ? street.getName() : null;
