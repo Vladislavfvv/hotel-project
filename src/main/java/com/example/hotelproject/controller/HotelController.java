@@ -55,16 +55,16 @@ public class HotelController {
         log.info("Create hotel with data: {}", hotelDTO);
         return hotelService.createHotel(hotelDTO);
     }
-//
-//    //POST /hotels/{id}/amenities - добавление списка amenities к отелю
-//    @PostMapping("/hotels/{id}/amenities")
-//    public Optional<HotelDTO> addAmenities(
-//            @PathVariable Long id,
-//            @RequestParam(required = false) List<String> amenities
-//    ) {
-//        log.info("Add amenities with params: " + amenities);
-//        return hotelService.addAmenities(id, amenities);
-//    }
+
+    // POST /hotels/{id}/amenities - добавление списка amenities к отелю
+    @PostMapping("/hotels/{id}/amenities")
+    public HotelDTO addAmenities(
+            @PathVariable Long id,
+            @RequestBody List<String> amenities
+    ) {
+        log.info("Add amenities to hotel id={}: {}", id, amenities);
+        return hotelService.addAmenities(id, amenities);
+    }
 
     //GET /histogram/{param} - получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.
     //	Например: /histogram/city должен вернуть:

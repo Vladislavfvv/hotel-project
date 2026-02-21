@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -183,5 +184,36 @@ public class HotelService {
 
         return hotelMapper.toShortDTO(savedHotel);
     }
+
+    @Transactional
+    public HotelDTO addAmenities(Long id, List<String> amenities) {
+        log.info("Adding amenities to hotel id={}: amenities={}", id, amenities);
+        
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + id));
+        
+        for (String amenityName : amenities) {
+            Amenity amenity = amenityRepository.findByName(amenityName)
+                    .orElseGet(() -> {
+                        Amenity newAmenity = new Amenity();
+                        newAmenity.setName(amenityName);
+                        return amenityRepository.save(newAmenity);
+                    });
+
+            if (!hotel.getAmenities().contains(amenity)) {
+                hotel.getAmenities().add(amenity);
+                log.info("Added amenity '{}' to hotel '{}'", amenityName, hotel.getName());
+            } else {
+                log.info("Amenity '{}' already exists for hotel '{}'", amenityName, hotel.getName());
+            }
+        }
+
+        Hotel savedHotel = hotelRepository.save(hotel);
+        log.info("Updated hotel: id={}, name={}, amenities count={}", 
+                savedHotel.getId(), savedHotel.getName(), savedHotel.getAmenities().size());
+        
+        return hotelMapper.toDTO(savedHotel);
+    }
+
 
 }
