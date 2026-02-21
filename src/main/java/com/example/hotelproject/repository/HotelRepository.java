@@ -1,5 +1,6 @@
 package com.example.hotelproject.repository;
 
+import com.example.hotelproject.entity.Country;
 import com.example.hotelproject.entity.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,12 +8,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
     // Поиск по имени
-    Hotel findByName(String name);
+//    Hotel findByName(String name);
+
+    Optional<Hotel> findByNameIs(String name);
+
 
     // Найти отели, содержащие текст в названии
     List<Hotel> findByNameContainingIgnoreCase(String name);

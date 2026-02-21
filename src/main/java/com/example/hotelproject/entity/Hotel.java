@@ -42,7 +42,7 @@ public class Hotel {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, length = 1000)
+    @Column(length = 1000)
     private String description;
 
     @ManyToOne
@@ -69,4 +69,5 @@ public class Hotel {
     )
     @Builder.Default
     private List<Amenity> amenities = new ArrayList<>();
+
 }

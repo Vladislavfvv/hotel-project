@@ -49,12 +49,12 @@ public class HotelController {
         return hotelService.searchHotels(name, brand, city, country, amenity);
     }
 
-//    //POST /hotels - создание нового отеля
-//    @PostMapping("/hotels")
-//    public HotelDTO createHotel(@RequestBody HotelDTO hotelDTO) {
-//        log.info("Create hotel with data: " + hotelDTO);
-//        return hotelService.createHotel(hotelDTO);
-//    }
+    // POST /hotels - создание нового отеля
+    @PostMapping("/hotels")
+    public HotelDTO createHotel(@RequestBody HotelDTO hotelDTO) {
+        log.info("Create hotel with data: {}", hotelDTO);
+        return hotelService.createHotel(hotelDTO);
+    }
 //
 //    //POST /hotels/{id}/amenities - добавление списка amenities к отелю
 //    @PostMapping("/hotels/{id}/amenities")

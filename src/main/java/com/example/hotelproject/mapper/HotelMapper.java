@@ -21,6 +21,14 @@ public interface HotelMapper {
     HotelDTO toDTO(Hotel hotel);
     
     List<HotelDTO> toDTOList(List<Hotel> hotels);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "brand", ignore = true)
+    @Mapping(target = "address", ignore = true)
+    @Mapping(target = "contact", ignore = true)
+    @Mapping(target = "arrivalTime", ignore = true)
+    @Mapping(target = "amenities", ignore = true)
+    Hotel toEntity(HotelDTO hotelDTO);
     
     // Краткая информация об отеле
     @Mapping(target = "address", source = ".", qualifiedByName = "formatAddress")
