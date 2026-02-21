@@ -20,7 +20,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "amenities", indexes = {
-    @Index(name = "idx_amenity_name", columnList = "amenityName")
+    @Index(name = "idx_amenity_name", columnList = "name")
 })
 @Getter
 @Setter
