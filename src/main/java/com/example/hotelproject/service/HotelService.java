@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -58,28 +59,28 @@ public class HotelService {
             hotels = hotelRepository.findByNameContainingIgnoreCase(name);
         } else if (brands != null && !brands.isEmpty()) {
             if (brands.size() == 1) {
-                hotels = hotelRepository.findByBrand_Name(brands.get(0));
+                hotels = hotelRepository.findByBrand_Name(brands.getFirst());
             } else {
                 List<String> upperBrands = brands.stream().map(String::toUpperCase).toList();
                 hotels = hotelRepository.findByBrandNames(upperBrands);
             }
         } else if (cities != null && !cities.isEmpty()) {
             if (cities.size() == 1) {
-                hotels = hotelRepository.findByCity(cities.get(0));
+                hotels = hotelRepository.findByCity(cities.getFirst());
             } else {
                 List<String> upperCities = cities.stream().map(String::toUpperCase).toList();
                 hotels = hotelRepository.findByCities(upperCities);
             }
         } else if (countries != null && !countries.isEmpty()) {
             if (countries.size() == 1) {
-                hotels = hotelRepository.findByCountry(countries.get(0));
+                hotels = hotelRepository.findByCountry(countries.getFirst());
             } else {
                 List<String> upperCountries = countries.stream().map(String::toUpperCase).toList();
                 hotels = hotelRepository.findByCountries(upperCountries);
             }
         } else if (amenities != null && !amenities.isEmpty()) {
             if (amenities.size() == 1) {
-                hotels = hotelRepository.findByAmenities_Name(amenities.get(0));
+                hotels = hotelRepository.findByAmenities_Name(amenities.getFirst());
             } else {
                 List<String> upperAmenities = amenities.stream().map(String::toUpperCase).toList();
                 hotels = hotelRepository.findByAnyAmenities(upperAmenities);
@@ -92,7 +93,6 @@ public class HotelService {
         return hotelMapper.toShortDTOList(hotels);
     }
 
-    // POST /hotels - создание нового отеля
     // POST /hotels - создание нового отеля
     @Transactional
     public HotelShortDTO createHotel(HotelDTO hotelDTO) {
@@ -185,13 +185,14 @@ public class HotelService {
         return hotelMapper.toShortDTO(savedHotel);
     }
 
+    //POST /hotels/{id}/amenities - добавление списка amenities к отелю
     @Transactional
     public HotelDTO addAmenities(Long id, List<String> amenities) {
         log.info("Adding amenities to hotel id={}: amenities={}", id, amenities);
-        
+
         Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new HotelNotFoundException("Hotel not found with id: " + id));
-        
+
         for (String amenityName : amenities) {
             Amenity amenity = amenityRepository.findByName(amenityName)
                     .orElseGet(() -> {
@@ -209,11 +210,30 @@ public class HotelService {
         }
 
         Hotel savedHotel = hotelRepository.save(hotel);
-        log.info("Updated hotel: id={}, name={}, amenities count={}", 
+        log.info("Updated hotel: id={}, name={}, amenities count={}",
                 savedHotel.getId(), savedHotel.getName(), savedHotel.getAmenities().size());
-        
+
         return hotelMapper.toDTO(savedHotel);
     }
 
+    //GET /histogram/{param} - получение колличества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.
+    public Map<String, Long> getHotelListGroupByParam(String param) {
+        log.info("Get group list from service with param = {}", param);
 
+        List<Object[]> results = switch (param.toLowerCase()) {
+            case "city", "cities" -> cityRepository.groupHotelsByCities();
+            case "country", "countries" -> countryRepository.groupHotelsByCountry();
+            case "brand", "brands" -> brandRepository.groupHotelsByBrands();
+            case "amenity", "amenities" -> amenityRepository.groupHotelsByAmenities();
+            default -> throw new IllegalArgumentException("Invalid parameter: " + param);
+        };
+
+        // Преобразуем List<Object[]> в Map<String, Long>
+        //JPQL не может напрямую вернуть Map, поэтому возвращаем массив объектов и преобразуем в Map в Java.
+        return results.stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],      // название (city/country/brand/amenity)
+                        row -> (Long) row[1]       // количество отелей
+                ));
+    }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -67,28 +67,12 @@ public class HotelController {
     }
 
     //GET /histogram/{param} - получение количества отелей сгруппированных по каждому значению указанного параметра. Параметр: brand, city, country, amenities.
-    //	Например: /histogram/city должен вернуть:
-    //		{
-    //			"Minsk": 1,
-    //			"Moskow: 2,
-    //			"Mogilev: 1,
-    //			и тд.
-    //		}
-    //	а /histogram/amenities должен вернуть:
-    //		{
-    //			"Free parking": 1,
-    //			"Free WiFi: 20,
-    //			"Non-smoking rooms": 5,
-    //			"Fitness center": 1,
-    //			и тд.
-    //		}
-
-//    @GetMapping("/histogram/{param}")
-//    public List<HotelShortDTO> getHotelHistogram(
-//            @PathVariable String param
-//    ) {
-//        log.info("Get hotel histogram with params: " + param);
-//        return hotelService.getHotelsListGroupByParam(param);
-//    }
+    @GetMapping("/histogram/{param}")
+    public Map<String, Long> getHotelHistogram(
+            @PathVariable String param
+    ) {
+        log.info("Get grouping list from controller with params: " + param);
+        return hotelService.getHotelListGroupByParam(param);
+    }
 
 }
