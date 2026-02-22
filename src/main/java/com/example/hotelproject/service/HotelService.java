@@ -1,5 +1,8 @@
 package com.example.hotelproject.service;
 
+import com.example.hotelproject.dto.AddressDTO;
+import com.example.hotelproject.dto.ArrivalTimeDTO;
+import com.example.hotelproject.dto.ContactDTO;
 import com.example.hotelproject.dto.HotelDTO;
 import com.example.hotelproject.dto.HotelShortDTO;
 import com.example.hotelproject.entity.*;
@@ -52,8 +55,6 @@ public class HotelService {
             List<String> countries,
             List<String> amenities
     ) {
-        List<Hotel> hotels;
-
         // Фильтруем пустые строки из списков
         brands = filterEmptyStrings(brands);
         cities = filterEmptyStrings(cities);
@@ -61,42 +62,54 @@ public class HotelService {
         amenities = filterEmptyStrings(amenities);
 
         // Ищем по тому параметру, который передан
+        List<Hotel> hotels;
         if (name != null && !name.trim().isEmpty()) {
             hotels = hotelRepository.findByNameContainingIgnoreCase(name);
         } else if (brands != null && !brands.isEmpty()) {
-            if (brands.size() == 1) {
-                hotels = hotelRepository.findByBrand_Name(brands.getFirst());
-            } else {
-                List<String> upperBrands = brands.stream().map(String::toUpperCase).toList();
-                hotels = hotelRepository.findByBrandNames(upperBrands);
-            }
+            hotels = searchByBrands(brands);
         } else if (cities != null && !cities.isEmpty()) {
-            if (cities.size() == 1) {
-                hotels = hotelRepository.findByCity(cities.getFirst());
-            } else {
-                List<String> upperCities = cities.stream().map(String::toUpperCase).toList();
-                hotels = hotelRepository.findByCities(upperCities);
-            }
+            hotels = searchByCities(cities);
         } else if (countries != null && !countries.isEmpty()) {
-            if (countries.size() == 1) {
-                hotels = hotelRepository.findByCountry(countries.getFirst());
-            } else {
-                List<String> upperCountries = countries.stream().map(String::toUpperCase).toList();
-                hotels = hotelRepository.findByCountries(upperCountries);
-            }
+            hotels = searchByCountries(countries);
         } else if (amenities != null && !amenities.isEmpty()) {
-            if (amenities.size() == 1) {
-                hotels = hotelRepository.findByAmenities_Name(amenities.getFirst());
-            } else {
-                List<String> upperAmenities = amenities.stream().map(String::toUpperCase).toList();
-                hotels = hotelRepository.findByAnyAmenities(upperAmenities);
-            }
+            hotels = searchByAmenities(amenities);
         } else {
-            // Нет валидных параметров - возвращаем пустой список
             hotels = List.of();
         }
 
         return hotelMapper.toShortDTOList(hotels);
+    }
+
+    private List<Hotel> searchByBrands(List<String> brands) {
+        if (brands.size() == 1) {
+            return hotelRepository.findByBrand_Name(brands.getFirst());
+        }
+        List<String> upperBrands = brands.stream().map(String::toUpperCase).toList();
+        return hotelRepository.findByBrandNames(upperBrands);
+    }
+
+    private List<Hotel> searchByCities(List<String> cities) {
+        if (cities.size() == 1) {
+            return hotelRepository.findByCity(cities.getFirst());
+        }
+        List<String> upperCities = cities.stream().map(String::toUpperCase).toList();
+        return hotelRepository.findByCities(upperCities);
+    }
+
+    private List<Hotel> searchByCountries(List<String> countries) {
+        if (countries.size() == 1) {
+            return hotelRepository.findByCountry(countries.getFirst());
+        }
+        List<String> upperCountries = countries.stream().map(String::toUpperCase).toList();
+        return hotelRepository.findByCountries(upperCountries);
+    }
+
+    private List<Hotel> searchByAmenities(List<String> amenities) {
+        if (amenities.size() == 1) {
+            return hotelRepository.findByAmenities_Name(amenities.getFirst());
+        }
+        List<String> upperAmenities = amenities.stream().map(String::toUpperCase).toList();
+        return hotelRepository.findByAnyAmenities(upperAmenities);
     }
 
     // Вспомогательный метод для фильтрации пустых строк
@@ -115,91 +128,120 @@ public class HotelService {
     public HotelShortDTO createHotel(HotelDTO hotelDTO) {
         log.info("Creating hotel: name={}, brand={}", hotelDTO.getName(), hotelDTO.getBrand());
 
-        // Проверка существования отеля
-        if (hotelRepository.findByNameIs(hotelDTO.getName()).isPresent()) {
-            log.warn("Hotel creation failed: name '{}' already exists", hotelDTO.getName());
-            throw new HotelAlreadyExistsException("Hotel '" + hotelDTO.getName() + "' already exists");
-        }
+        validateHotelNotExists(hotelDTO.getName());
 
-        // Создаем базовую сущность Hotel
         Hotel hotel = hotelMapper.toEntity(hotelDTO);
-
-        // Находим или создаем Brand
-        Brand brand = brandRepository.findByName(hotelDTO.getBrand())
-                .orElseGet(() -> {
-                    Brand newBrand = new Brand();
-                    newBrand.setName(hotelDTO.getBrand());
-                    return brandRepository.save(newBrand);
-                });
-        hotel.setBrand(brand);
+        hotel.setBrand(findOrCreateBrand(hotelDTO.getBrand()));
 
         if (hotelDTO.getAddress() != null) {
-            Address address = new Address();
-            address.setHouseNumber(hotelDTO.getAddress().getHouseNumber());
-            address.setPostcode(hotelDTO.getAddress().getPostCode());
-
-            Country country = countryRepository.findByName(hotelDTO.getAddress().getCountry())
-                    .orElseGet(() -> {
-                        Country newCountry = new Country();
-                        newCountry.setName(hotelDTO.getAddress().getCountry());
-                        return countryRepository.save(newCountry);
-                    });
-
-            City city = cityRepository.findByName(hotelDTO.getAddress().getCity())
-                    .orElseGet(() -> {
-                        City newCity = new City();
-                        newCity.setName(hotelDTO.getAddress().getCity());
-                        newCity.setCountry(country);
-                        return cityRepository.save(newCity);
-                    });
-
-            Street street = streetRepository.findByName(hotelDTO.getAddress().getStreet())
-                    .orElseGet(() -> {
-                        Street newStreet = new Street();
-                        newStreet.setName(hotelDTO.getAddress().getStreet());
-                        newStreet.setCity(city);
-                        return streetRepository.save(newStreet);
-                    });
-
-            address.setStreet(street);
-            address.setHotel(hotel);
-            hotel.setAddress(address);
+            hotel.setAddress(createAddress(hotelDTO.getAddress(), hotel));
         }
 
         if (hotelDTO.getContacts() != null) {
-            Contact contact = new Contact();
-            contact.setPhone(hotelDTO.getContacts().getPhone());
-            contact.setEmail(hotelDTO.getContacts().getEmail());
-            contact.setHotel(hotel);
-            hotel.setContact(contact);
+            hotel.setContact(createContact(hotelDTO.getContacts(), hotel));
         }
 
         if (hotelDTO.getArrivalTime() != null) {
-            ArrivalTime arrivalTime = new ArrivalTime();
-            arrivalTime.setCheckIn(hotelDTO.getArrivalTime().getCheckIn());
-            arrivalTime.setCheckOut(hotelDTO.getArrivalTime().getCheckOut());
-            arrivalTime.setHotel(hotel);
-            hotel.setArrivalTime(arrivalTime);
+            hotel.setArrivalTime(createArrivalTime(hotelDTO.getArrivalTime(), hotel));
         }
 
         if (hotelDTO.getAmenities() != null && !hotelDTO.getAmenities().isEmpty()) {
-            List<Amenity> amenities = new ArrayList<>();
-            for (String amenityName : hotelDTO.getAmenities()) {
-                Amenity amenity = amenityRepository.findByName(amenityName)
-                        .orElseGet(() -> {
-                            Amenity newAmenity = new Amenity();
-                            newAmenity.setName(amenityName);
-                            return amenityRepository.save(newAmenity);
-                        });
-                amenities.add(amenity);
-            }
-            hotel.setAmenities(amenities);
+            hotel.setAmenities(findOrCreateAmenities(hotelDTO.getAmenities()));
         }
 
         Hotel savedHotel = hotelRepository.save(hotel);
         log.info("Hotel created successfully: id={}, name={}", savedHotel.getId(), savedHotel.getName());
 
         return hotelMapper.toShortDTO(savedHotel);
+    }
+
+    private void validateHotelNotExists(String name) {
+        if (hotelRepository.findByNameIs(name).isPresent()) {
+            log.warn("Hotel creation failed: name '{}' already exists", name);
+            throw new HotelAlreadyExistsException("Hotel '" + name + "' already exists");
+        }
+    }
+
+    private Brand findOrCreateBrand(String brandName) {
+        return brandRepository.findByName(brandName)
+                .orElseGet(() -> {
+                    Brand newBrand = new Brand();
+                    newBrand.setName(brandName);
+                    return brandRepository.save(newBrand);
+                });
+    }
+
+    private Address createAddress(AddressDTO addressDTO, Hotel hotel) {
+        Address address = new Address();
+        address.setHouseNumber(addressDTO.getHouseNumber());
+        address.setPostcode(addressDTO.getPostCode());
+
+        Country country = findOrCreateCountry(addressDTO.getCountry());
+        City city = findOrCreateCity(addressDTO.getCity(), country);
+        Street street = findOrCreateStreet(addressDTO.getStreet(), city);
+
+        address.setStreet(street);
+        address.setHotel(hotel);
+        return address;
+    }
+
+    private Country findOrCreateCountry(String countryName) {
+        return countryRepository.findByName(countryName)
+                .orElseGet(() -> {
+                    Country newCountry = new Country();
+                    newCountry.setName(countryName);
+                    return countryRepository.save(newCountry);
+                });
+    }
+
+    private City findOrCreateCity(String cityName, Country country) {
+        return cityRepository.findByName(cityName)
+                .orElseGet(() -> {
+                    City newCity = new City();
+                    newCity.setName(cityName);
+                    newCity.setCountry(country);
+                    return cityRepository.save(newCity);
+                });
+    }
+
+    private Street findOrCreateStreet(String streetName, City city) {
+        return streetRepository.findByName(streetName)
+                .orElseGet(() -> {
+                    Street newStreet = new Street();
+                    newStreet.setName(streetName);
+                    newStreet.setCity(city);
+                    return streetRepository.save(newStreet);
+                });
+    }
+
+    private Contact createContact(ContactDTO contactDTO, Hotel hotel) {
+        Contact contact = new Contact();
+        contact.setPhone(contactDTO.getPhone());
+        contact.setEmail(contactDTO.getEmail());
+        contact.setHotel(hotel);
+        return contact;
+    }
+
+    private ArrivalTime createArrivalTime(ArrivalTimeDTO arrivalTimeDTO, Hotel hotel) {
+        ArrivalTime arrivalTime = new ArrivalTime();
+        arrivalTime.setCheckIn(arrivalTimeDTO.getCheckIn());
+        arrivalTime.setCheckOut(arrivalTimeDTO.getCheckOut());
+        arrivalTime.setHotel(hotel);
+        return arrivalTime;
+    }
+
+    private List<Amenity> findOrCreateAmenities(List<String> amenityNames) {
+        List<Amenity> amenities = new ArrayList<>();
+        for (String amenityName : amenityNames) {
+            Amenity amenity = amenityRepository.findByName(amenityName)
+                    .orElseGet(() -> {
+                        Amenity newAmenity = new Amenity();
+                        newAmenity.setName(amenityName);
+                        return amenityRepository.save(newAmenity);
+                    });
+            amenities.add(amenity);
+        }
+        return amenities;
     }
 
     //POST /hotels/{id}/amenities - добавление списка amenities к отелю
