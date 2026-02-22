@@ -54,8 +54,14 @@ public class HotelService {
     ) {
         List<Hotel> hotels;
 
+        // Фильтруем пустые строки из списков
+        brands = filterEmptyStrings(brands);
+        cities = filterEmptyStrings(cities);
+        countries = filterEmptyStrings(countries);
+        amenities = filterEmptyStrings(amenities);
+
         // Ищем по тому параметру, который передан
-        if (name != null && !name.isEmpty()) {
+        if (name != null && !name.trim().isEmpty()) {
             hotels = hotelRepository.findByNameContainingIgnoreCase(name);
         } else if (brands != null && !brands.isEmpty()) {
             if (brands.size() == 1) {
@@ -86,11 +92,22 @@ public class HotelService {
                 hotels = hotelRepository.findByAnyAmenities(upperAmenities);
             }
         } else {
-            // Если параметры не переданы - возвращаем все отели
-            hotels = hotelRepository.findAll();
+            // Нет валидных параметров - возвращаем пустой список
+            hotels = List.of();
         }
 
         return hotelMapper.toShortDTOList(hotels);
+    }
+
+    // Вспомогательный метод для фильтрации пустых строк
+    private List<String> filterEmptyStrings(List<String> list) {
+        if (list == null) {
+            return null;
+        }
+        List<String> filtered = list.stream()
+                .filter(s -> s != null && !s.trim().isEmpty())
+                .toList();
+        return filtered.isEmpty() ? null : filtered;
     }
 
     // POST /hotels - создание нового отеля
