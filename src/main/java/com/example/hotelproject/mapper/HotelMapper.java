@@ -31,11 +31,25 @@ public interface HotelMapper {
     Hotel toEntity(HotelDTO hotelDTO);
     
     // Краткая информация об отеле
+    @Mapping(target = "description", source = ".", qualifiedByName = "truncateDescription")
     @Mapping(target = "address", source = ".", qualifiedByName = "formatAddress")
     @Mapping(target = "phone", source = ".", qualifiedByName = "getFirstPhone")
     HotelShortDTO toShortDTO(Hotel hotel);
     
     List<HotelShortDTO> toShortDTOList(List<Hotel> hotels);
+    
+    // Обрезание description до 151 символа с многоточием
+    @Named("truncateDescription")
+    default String truncateDescription(Hotel hotel) {
+        if (hotel.getDescription() == null) {
+            return null;
+        }
+        String description = hotel.getDescription();
+        if (description.length() <= 151) {
+            return description;
+        }
+        return description.substring(0, 151) + "...";
+    }
     
     // Форматирование адреса в строку
     @Named("formatAddress")

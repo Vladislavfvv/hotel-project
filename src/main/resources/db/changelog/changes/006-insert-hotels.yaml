@@ -7,20 +7,18 @@ databaseChangeLog:
       changes:
         - insert:
             tableName: hotels
-
             columns:
               - column:
                   name: name
                   value: "DoubleTree by Hilton Minsk"
               - column:
                   name: description
-                  value: "The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotel's 20th floor"
+                  value: "The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotel's 20th floor. It's best hotel in Minsk."
               - column:
                   name: brand_id
                   valueComputed: "(SELECT id FROM brands WHERE name = 'Hilton')"
         - insert:
             tableName: hotels
-
             columns:
               - column:
                   name: name
@@ -34,7 +32,6 @@ databaseChangeLog:
 
         - insert:
             tableName: hotels
-
             columns:
               - column:
                   name: name
@@ -48,7 +45,6 @@ databaseChangeLog:
 
         - insert:
             tableName: hotels
-
             columns:
               - column:
                   name: name
@@ -62,7 +58,6 @@ databaseChangeLog:
         
         - insert:
             tableName: hotels
-
             columns:
               - column:
                   name: name
@@ -77,5 +72,4 @@ databaseChangeLog:
       rollback:
         - delete:
             tableName: hotels
-
             where: "name IN ('DoubleTree by Hilton Minsk', 'Waldorf Astoria by Hilton Minsk', 'Hampton by Hilton Minsk', 'Marriott Moscow', 'Radisson Blu Istanbul')"
