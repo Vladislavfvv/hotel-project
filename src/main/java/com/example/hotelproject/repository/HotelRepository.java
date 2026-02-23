@@ -57,5 +57,4 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
     // Найти отели с любым из указанных удобств
     @Query("SELECT DISTINCT h FROM Hotel h JOIN h.amenities a WHERE UPPER(a.name) IN :amenityNames")
     List<Hotel> findByAnyAmenities(@Param("amenityNames") List<String> amenityNames);
-
-
+}

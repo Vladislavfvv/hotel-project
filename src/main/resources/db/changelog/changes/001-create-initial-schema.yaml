@@ -197,7 +197,7 @@ databaseChangeLog:
                     foreignKeyName: fk_address_hotel
                     references: hotels(id)
               - column:
-                  name: houseNumber
+                  name: housenumber
                   type: INT
                   constraints:
                     nullable: false

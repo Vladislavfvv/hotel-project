@@ -13,7 +13,7 @@ databaseChangeLog:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'DoubleTree by Hilton Minsk')"
               - column:
-                  name: houseNumber
+                  name: housenumber
                   valueNumeric: 9
               - column:
                   name: street_id
@@ -30,7 +30,7 @@ databaseChangeLog:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Waldorf Astoria by Hilton Minsk')"
               - column:
-                  name: houseNumber
+                  name: housenumber
                   valueNumeric: 27
               - column:
                   name: street_id
@@ -47,7 +47,7 @@ databaseChangeLog:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Hampton by Hilton Minsk')"
               - column:
-                  name: houseNumber
+                  name: housenumber
                   valueNumeric: 8
               - column:
                   name: street_id
@@ -64,7 +64,7 @@ databaseChangeLog:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Marriott Moscow')"
               - column:
-                  name: houseNumber
+                  name: housenumber
                   valueNumeric: 1
               - column:
                   name: street_id
@@ -81,7 +81,7 @@ databaseChangeLog:
                   name: id
                   valueComputed: "(SELECT id FROM hotels WHERE name = 'Radisson Blu Istanbul')"
               - column:
-                  name: houseNumber
+                  name: housenumber
                   valueNumeric: 15
               - column:
                   name: street_id

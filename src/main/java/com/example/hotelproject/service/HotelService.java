@@ -8,6 +8,7 @@ import com.example.hotelproject.dto.HotelShortDTO;
 import com.example.hotelproject.entity.*;
 import com.example.hotelproject.exception.HotelAlreadyExistsException;
 import com.example.hotelproject.exception.HotelNotFoundException;
+import com.example.hotelproject.exception.MissingSearchParameterException;
 import com.example.hotelproject.mapper.HotelMapper;
 import com.example.hotelproject.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -61,20 +62,29 @@ public class HotelService {
         countries = filterEmptyStrings(countries);
         amenities = filterEmptyStrings(amenities);
 
+        // Проверяем, что хотя бы один параметр передан
+        boolean hasName = name != null && !name.trim().isEmpty();
+        boolean hasBrands = brands != null && !brands.isEmpty();
+        boolean hasCities = cities != null && !cities.isEmpty();
+        boolean hasCountries = countries != null && !countries.isEmpty();
+        boolean hasAmenities = amenities != null && !amenities.isEmpty();
+
+        if (!hasName && !hasBrands && !hasCities && !hasCountries && !hasAmenities) {
+            throw new MissingSearchParameterException("At least one search parameter is required");
+        }
+
         // Ищем по тому параметру, который передан
         List<Hotel> hotels;
-        if (name != null && !name.trim().isEmpty()) {
+        if (hasName) {
             hotels = hotelRepository.findByNameContainingIgnoreCase(name);
-        } else if (brands != null && !brands.isEmpty()) {
+        } else if (hasBrands) {
             hotels = searchByBrands(brands);
-        } else if (cities != null && !cities.isEmpty()) {
+        } else if (hasCities) {
             hotels = searchByCities(cities);
-        } else if (countries != null && !countries.isEmpty()) {
+        } else if (hasCountries) {
             hotels = searchByCountries(countries);
-        } else if (amenities != null && !amenities.isEmpty()) {
-            hotels = searchByAmenities(amenities);
         } else {
-            hotels = List.of();
+            hotels = searchByAmenities(amenities);
         }
 
         return hotelMapper.toShortDTOList(hotels);

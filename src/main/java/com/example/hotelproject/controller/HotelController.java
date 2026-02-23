@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,7 @@ public class HotelController {
 
     @Operation(
             summary = "Search hotels",
-            description = "Search hotels by name, brand, city, country, or amenity. Multiple values can be provided for brand, city, country, and amenity parameters."
+            description = "Search hotels by name, brand, city, country, or amenity. Multiple values can be provided for brand, city, country, and amenity parameters. At least one parameter is required."
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -96,19 +97,24 @@ public class HotelController {
                             mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = HotelShortDTO.class))
                     )
+            ),
+            @ApiResponse(
+                    responseCode = "422",
+                    description = "At least one search parameter is required",
+                    content = @Content(mediaType = "application/json")
             )
     })
     @GetMapping("/search")
     public List<HotelShortDTO> searchHotels(
-            @Parameter(description = "Hotel name (partial match)", example = "Hilton")
+            @Parameter(description = "Hotel name (partial match)")
             @RequestParam(required = false) String name,
-            @Parameter(description = "Brand name(s)", example = "Hilton")
+            @Parameter(description = "Brand name(s)")
             @RequestParam(required = false) List<String> brand,
-            @Parameter(description = "City name(s)", example = "Minsk")
+            @Parameter(description = "City name(s)")
             @RequestParam(required = false) List<String> city,
-            @Parameter(description = "Country name(s)", example = "Belarus")
+            @Parameter(description = "Country name(s)")
             @RequestParam(required = false) List<String> country,
-            @Parameter(description = "Amenity name(s)", example = "Free WiFi")
+            @Parameter(description = "Amenity name(s)")
             @RequestParam(required = false) List<String> amenity
     ) {
         log.info("Search hotels with params: name={}, brand={}, city={}, country={}, amenity={}",
@@ -154,7 +160,7 @@ public class HotelController {
                     required = true,
                     content = @Content(schema = @Schema(implementation = HotelDTO.class))
             )
-            @RequestBody HotelDTO hotelDTO
+            @Valid @RequestBody HotelDTO hotelDTO
     ) {
         log.info("Create hotel with data: {}", hotelDTO);
         return hotelService.createHotel(hotelDTO);

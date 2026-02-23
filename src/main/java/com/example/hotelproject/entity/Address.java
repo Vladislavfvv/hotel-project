@@ -31,7 +31,7 @@ public class Address {
     @Id
     private Long id;
 
-    @Column(name = "houseNumber", nullable = false)
+    @Column(name = "housenumber", nullable = false)
     private int houseNumber;
 
     @ManyToOne
