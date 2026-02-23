@@ -17,9 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(HotelController.class)
 @DisplayName("HotelController Unit Tests")
+@SuppressWarnings("deprecation")
 class HotelControllerTest {
 
     @Autowired
@@ -300,5 +303,247 @@ class HotelControllerTest {
                 .andExpect(jsonPath("$.amenities[0]", is("Pool")));
 
         verify(hotelService, times(1)).addAmenities(hotelId, singleAmenity);
+    }
+
+    @Test
+    @DisplayName("POST /property-view/hotels - should create hotel with status 201")
+    void createHotel_ShouldCreateHotel_WithStatus201() throws Exception {
+        // Given
+        HotelDTO newHotelDTO = HotelDTO.builder()
+                .name("New Test Hotel")
+                .brand("Hilton")
+                .description("Test description")
+                .build();
+        
+        HotelShortDTO createdHotel = HotelShortDTO.builder()
+                .id(10L)
+                .name("New Test Hotel")
+                .description("Test description")
+                .build();
+        
+        when(hotelService.createHotel(any(HotelDTO.class))).thenReturn(createdHotel);
+
+        // When & Then
+        mockMvc.perform(post("/property-view/hotels")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newHotelDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(10)))
+                .andExpect(jsonPath("$.name", is("New Test Hotel")))
+                .andExpect(jsonPath("$.description", is("Test description")));
+
+        verify(hotelService, times(1)).createHotel(any(HotelDTO.class));
+    }
+
+    @Test
+    @DisplayName("POST /property-view/hotels - should return 409 when hotel already exists")
+    void createHotel_ShouldReturn409_WhenHotelAlreadyExists() throws Exception {
+        // Given
+        HotelDTO newHotelDTO = HotelDTO.builder()
+                .name("DoubleTree by Hilton Minsk")
+                .brand("Hilton")
+                .build();
+        
+        when(hotelService.createHotel(any(HotelDTO.class)))
+                .thenThrow(new com.example.hotelproject.exception.HotelAlreadyExistsException(
+                        "Hotel with name 'DoubleTree by Hilton Minsk' already exists"));
+
+        // When & Then
+        mockMvc.perform(post("/property-view/hotels")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newHotelDTO)))
+                .andExpect(status().isConflict())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status", is(409)))
+                .andExpect(jsonPath("$.error", is("Conflict")))
+                .andExpect(jsonPath("$.message", is("Hotel with name 'DoubleTree by Hilton Minsk' already exists")));
+
+        verify(hotelService, times(1)).createHotel(any(HotelDTO.class));
+    }
+
+    @Test
+    @DisplayName("POST /property-view/hotels - should return 400 for invalid data")
+    void createHotel_ShouldReturn400_ForInvalidData() throws Exception {
+        // Given - hotel without required name field
+        HotelDTO invalidHotelDTO = HotelDTO.builder()
+                .brand("Hilton")
+                .build();
+
+        // When & Then
+        mockMvc.perform(post("/property-view/hotels")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidHotelDTO)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("Bad Request")))
+                .andExpect(jsonPath("$.message", is("Validation failed")));
+
+        verify(hotelService, never()).createHotel(any(HotelDTO.class));
+    }
+
+    @Test
+    @DisplayName("GET /property-view/search - should search hotels by name")
+    void searchHotels_ShouldSearchByName_WithStatus200() throws Exception {
+        // Given
+        String name = "Hilton";
+        List<HotelShortDTO> hotels = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelService.searchHotels(name, null, null, null, null)).thenReturn(hotels);
+
+        // When & Then
+        mockMvc.perform(get("/property-view/search")
+                        .param("name", name)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name", is("DoubleTree by Hilton Minsk")))
+                .andExpect(jsonPath("$[1].id", is(2)))
+                .andExpect(jsonPath("$[1].name", is("Hampton by Hilton Minsk")));
+
+        verify(hotelService, times(1)).searchHotels(name, null, null, null, null);
+    }
+
+    @Test
+    @DisplayName("GET /property-view/search - should search hotels by brand")
+    void searchHotels_ShouldSearchByBrand_WithStatus200() throws Exception {
+        // Given
+        List<String> brands = Arrays.asList("Hilton");
+        List<HotelShortDTO> hotels = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelService.searchHotels(null, brands, null, null, null)).thenReturn(hotels);
+
+        // When & Then
+        mockMvc.perform(get("/property-view/search")
+                        .param("brand", "Hilton")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)));
+
+        verify(hotelService, times(1)).searchHotels(null, brands, null, null, null);
+    }
+
+    @Test
+    @DisplayName("GET /property-view/search - should search hotels by multiple brands")
+    void searchHotels_ShouldSearchByMultipleBrands_WithStatus200() throws Exception {
+        // Given
+        List<String> brands = Arrays.asList("Hilton", "Marriott");
+        List<HotelShortDTO> hotels = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelService.searchHotels(null, brands, null, null, null)).thenReturn(hotels);
+
+        // When & Then
+        mockMvc.perform(get("/property-view/search")
+                        .param("brand", "Hilton", "Marriott")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(2)));
+
+        verify(hotelService, times(1)).searchHotels(null, brands, null, null, null);
+    }
+
+    @Test
+    @DisplayName("GET /property-view/search - should return 422 when no parameters provided")
+    void searchHotels_ShouldReturn422_WhenNoParametersProvided() throws Exception {
+        // Given
+        when(hotelService.searchHotels(null, null, null, null, null))
+                .thenThrow(new com.example.hotelproject.exception.MissingSearchParameterException(
+                        "At least one search parameter is required"));
+
+        // When & Then
+        mockMvc.perform(get("/property-view/search")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status", is(422)))
+                .andExpect(jsonPath("$.error", is("Unprocessable Entity")))
+                .andExpect(jsonPath("$.message", is("At least one search parameter is required")));
+
+        verify(hotelService, times(1)).searchHotels(null, null, null, null, null);
+    }
+
+    @Test
+    @DisplayName("GET /property-view/search - should return empty list when no hotels found")
+    void searchHotels_ShouldReturnEmptyList_WhenNoHotelsFound() throws Exception {
+        // Given
+        String name = "NonExistent";
+        
+        when(hotelService.searchHotels(name, null, null, null, null)).thenReturn(Collections.emptyList());
+
+        // When & Then
+        mockMvc.perform(get("/property-view/search")
+                        .param("name", name)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
+
+        verify(hotelService, times(1)).searchHotels(name, null, null, null, null);
+    }
+
+    @Test
+    @DisplayName("GET /property-view/histogram/{param} - should return histogram by city")
+    void getHotelHistogram_ShouldReturnHistogramByCity_WithStatus200() throws Exception {
+        // Given
+        Map<String, Long> histogram = new java.util.HashMap<>();
+        histogram.put("Minsk", 3L);
+        histogram.put("Warsaw", 2L);
+        
+        when(hotelService.getHotelListGroupByParam("city")).thenReturn(histogram);
+
+        // When & Then
+        mockMvc.perform(get("/property-view/histogram/city")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.Minsk", is(3)))
+                .andExpect(jsonPath("$.Warsaw", is(2)));
+
+        verify(hotelService, times(1)).getHotelListGroupByParam("city");
+    }
+
+    @Test
+    @DisplayName("GET /property-view/histogram/{param} - should return histogram by brand")
+    void getHotelHistogram_ShouldReturnHistogramByBrand_WithStatus200() throws Exception {
+        // Given
+        Map<String, Long> histogram = new java.util.HashMap<>();
+        histogram.put("Hilton", 5L);
+        histogram.put("Marriott", 3L);
+        
+        when(hotelService.getHotelListGroupByParam("brand")).thenReturn(histogram);
+
+        // When & Then
+        mockMvc.perform(get("/property-view/histogram/brand")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.Hilton", is(5)))
+                .andExpect(jsonPath("$.Marriott", is(3)));
+
+        verify(hotelService, times(1)).getHotelListGroupByParam("brand");
+    }
+
+    @Test
+    @DisplayName("GET /property-view/histogram/{param} - should return 400 for invalid parameter")
+    void getHotelHistogram_ShouldReturn400_ForInvalidParameter() throws Exception {
+        // Given
+        when(hotelService.getHotelListGroupByParam("invalid"))
+                .thenThrow(new IllegalArgumentException("Invalid parameter: invalid"));
+
+        // When & Then
+        mockMvc.perform(get("/property-view/histogram/invalid")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.status", is(400)))
+                .andExpect(jsonPath("$.error", is("Bad Request")))
+                .andExpect(jsonPath("$.message", is("Invalid parameter: invalid")));
+
+        verify(hotelService, times(1)).getHotelListGroupByParam("invalid");
     }
 }

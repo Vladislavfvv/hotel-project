@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +41,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -367,5 +367,220 @@ class HotelServiceTest {
         verify(hotelRepository, times(1)).findById(hotelId);
         verify(amenityRepository, never()).findByName(anyString());
         verify(hotelRepository, times(1)).save(hotel1);
+    }
+
+    @Test
+    @DisplayName("createHotel - should create hotel successfully with all data")
+    void createHotel_ShouldCreateHotelSuccessfully_WithAllData() {
+        // Given
+        HotelDTO newHotelDTO = HotelDTO.builder()
+                .name("New Test Hotel")
+                .brand("Hilton")
+                .description("Test description")
+                .build();
+        
+        Brand brand = Brand.builder().id(1L).name("Hilton").build();
+        Hotel newHotel = Hotel.builder()
+                .name("New Test Hotel")
+                .brand(brand)
+                .description("Test description")
+                .build();
+        
+        Hotel savedHotel = Hotel.builder()
+                .id(10L)
+                .name("New Test Hotel")
+                .brand(brand)
+                .description("Test description")
+                .build();
+        
+        when(hotelRepository.findByNameIs("New Test Hotel")).thenReturn(Optional.empty());
+        when(hotelMapper.toEntity(newHotelDTO)).thenReturn(newHotel);
+        when(brandRepository.findByName("Hilton")).thenReturn(Optional.of(brand));
+        when(hotelRepository.save(any(Hotel.class))).thenReturn(savedHotel);
+        when(hotelMapper.toShortDTO(savedHotel)).thenReturn(hotelShortDTO1);
+        
+        // When
+        HotelShortDTO result = hotelService.createHotel(newHotelDTO);
+        
+        // Then
+        assertThat(result).isNotNull();
+        
+        verify(hotelRepository, times(1)).findByNameIs("New Test Hotel");
+        verify(brandRepository, times(1)).findByName("Hilton");
+        verify(hotelRepository, times(1)).save(any(Hotel.class));
+        verify(hotelMapper, times(1)).toShortDTO(savedHotel);
+    }
+
+    @Test
+    @DisplayName("createHotel - should throw exception when hotel already exists")
+    void createHotel_ShouldThrowException_WhenHotelAlreadyExists() {
+        // Given
+        HotelDTO newHotelDTO = HotelDTO.builder()
+                .name("DoubleTree by Hilton Minsk")
+                .brand("Hilton")
+                .build();
+        
+        when(hotelRepository.findByNameIs("DoubleTree by Hilton Minsk")).thenReturn(Optional.of(hotel1));
+        
+        // When & Then
+        assertThatThrownBy(() -> hotelService.createHotel(newHotelDTO))
+                .isInstanceOf(com.example.hotelproject.exception.HotelAlreadyExistsException.class)
+                .hasMessageContaining("Hotel 'DoubleTree by Hilton Minsk' already exists");
+        
+        verify(hotelRepository, times(1)).findByNameIs("DoubleTree by Hilton Minsk");
+        verify(hotelRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("searchHotels - should search by name")
+    void searchHotels_ShouldSearchByName() {
+        // Given
+        String name = "Hilton";
+        List<Hotel> hotels = Arrays.asList(hotel1, hotel2);
+        List<HotelShortDTO> expectedDTOs = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelRepository.findByNameContainingIgnoreCase(name)).thenReturn(hotels);
+        when(hotelMapper.toShortDTOList(hotels)).thenReturn(expectedDTOs);
+        
+        // When
+        List<HotelShortDTO> result = hotelService.searchHotels(name, null, null, null, null);
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        assertThat(result).containsExactly(hotelShortDTO1, hotelShortDTO2);
+        
+        verify(hotelRepository, times(1)).findByNameContainingIgnoreCase(name);
+        verify(hotelMapper, times(1)).toShortDTOList(hotels);
+    }
+
+    @Test
+    @DisplayName("searchHotels - should search by single brand")
+    void searchHotels_ShouldSearchBySingleBrand() {
+        // Given
+        List<String> brands = Arrays.asList("Hilton");
+        List<Hotel> hotels = Arrays.asList(hotel1, hotel2);
+        List<HotelShortDTO> expectedDTOs = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelRepository.findByBrand_Name("Hilton")).thenReturn(hotels);
+        when(hotelMapper.toShortDTOList(hotels)).thenReturn(expectedDTOs);
+        
+        // When
+        List<HotelShortDTO> result = hotelService.searchHotels(null, brands, null, null, null);
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        
+        verify(hotelRepository, times(1)).findByBrand_Name("Hilton");
+        verify(hotelMapper, times(1)).toShortDTOList(hotels);
+    }
+
+    @Test
+    @DisplayName("searchHotels - should search by multiple brands")
+    void searchHotels_ShouldSearchByMultipleBrands() {
+        // Given
+        List<String> brands = Arrays.asList("Hilton", "Marriott");
+        List<Hotel> hotels = Arrays.asList(hotel1, hotel2);
+        List<HotelShortDTO> expectedDTOs = Arrays.asList(hotelShortDTO1, hotelShortDTO2);
+        
+        when(hotelRepository.findByBrandNames(Arrays.asList("HILTON", "MARRIOTT"))).thenReturn(hotels);
+        when(hotelMapper.toShortDTOList(hotels)).thenReturn(expectedDTOs);
+        
+        // When
+        List<HotelShortDTO> result = hotelService.searchHotels(null, brands, null, null, null);
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        
+        verify(hotelRepository, times(1)).findByBrandNames(Arrays.asList("HILTON", "MARRIOTT"));
+        verify(hotelMapper, times(1)).toShortDTOList(hotels);
+    }
+
+    @Test
+    @DisplayName("searchHotels - should throw exception when no parameters provided")
+    void searchHotels_ShouldThrowException_WhenNoParametersProvided() {
+        // When & Then
+        assertThatThrownBy(() -> hotelService.searchHotels(null, null, null, null, null))
+                .isInstanceOf(com.example.hotelproject.exception.MissingSearchParameterException.class)
+                .hasMessage("At least one search parameter is required");
+        
+        verify(hotelRepository, never()).findByNameContainingIgnoreCase(anyString());
+    }
+
+    @Test
+    @DisplayName("searchHotels - should return empty list when no hotels found")
+    void searchHotels_ShouldReturnEmptyList_WhenNoHotelsFound() {
+        // Given
+        String name = "NonExistent";
+        List<Hotel> emptyList = Collections.emptyList();
+        
+        when(hotelRepository.findByNameContainingIgnoreCase(name)).thenReturn(emptyList);
+        when(hotelMapper.toShortDTOList(emptyList)).thenReturn(Collections.emptyList());
+        
+        // When
+        List<HotelShortDTO> result = hotelService.searchHotels(name, null, null, null, null);
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).isEmpty();
+        
+        verify(hotelRepository, times(1)).findByNameContainingIgnoreCase(name);
+    }
+
+    @Test
+    @DisplayName("getHotelListGroupByParam - should group by city")
+    void getHotelListGroupByParam_ShouldGroupByCity() {
+        // Given
+        List<Object[]> results = Arrays.asList(
+                new Object[]{"Minsk", 3L},
+                new Object[]{"Warsaw", 2L}
+        );
+        
+        when(cityRepository.groupHotelsByCities()).thenReturn(results);
+        
+        // When
+        Map<String, Long> result = hotelService.getHotelListGroupByParam("city");
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        assertThat(result.get("Minsk")).isEqualTo(3L);
+        assertThat(result.get("Warsaw")).isEqualTo(2L);
+        
+        verify(cityRepository, times(1)).groupHotelsByCities();
+    }
+
+    @Test
+    @DisplayName("getHotelListGroupByParam - should group by brand")
+    void getHotelListGroupByParam_ShouldGroupByBrand() {
+        // Given
+        List<Object[]> results = Arrays.asList(
+                new Object[]{"Hilton", 5L},
+                new Object[]{"Marriott", 3L}
+        );
+        
+        when(brandRepository.groupHotelsByBrands()).thenReturn(results);
+        
+        // When
+        Map<String, Long> result = hotelService.getHotelListGroupByParam("brand");
+        
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result).hasSize(2);
+        assertThat(result.get("Hilton")).isEqualTo(5L);
+        assertThat(result.get("Marriott")).isEqualTo(3L);
+        
+        verify(brandRepository, times(1)).groupHotelsByBrands();
+    }
+
+    @Test
+    @DisplayName("getHotelListGroupByParam - should throw exception for invalid parameter")
+    void getHotelListGroupByParam_ShouldThrowException_ForInvalidParameter() {
+        // When & Then
+        assertThatThrownBy(() -> hotelService.getHotelListGroupByParam("invalid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Invalid parameter: invalid");
     }
 }
